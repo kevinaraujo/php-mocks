@@ -12,7 +12,7 @@ class ConnectionCreator
             $caminhoBanco = __DIR__ . '/../../banco.sqlite';
             self::$pdo = new \PDO('sqlite:' . $caminhoBanco);
             self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        }
+        } 
 
         return self::$pdo;
     }
