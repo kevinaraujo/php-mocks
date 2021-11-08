@@ -6,6 +6,7 @@ use Alura\Leilao\Dao\Leilao as LeilaoDao;
 use Alura\Leilao\Model\Leilao;
 use Alura\Leilao\Service\EmailSender;
 use Alura\Leilao\Service\Encerrador;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class EncerradorTest extends TestCase
@@ -13,6 +14,9 @@ class EncerradorTest extends TestCase
   private $encerrador;
   private $fiat147;
   private $variant;
+
+  /** @var MockObject */
+  private $emailSender;
 
   protected function setUp(): void
   {
@@ -44,8 +48,8 @@ class EncerradorTest extends TestCase
         [$this->variant]
       );
 
-      $emailSender = $this->createMock(EmailSender::class);
-      $this->encerrador = new Encerrador($leilaoDao, $emailSender);
+      $this->emailSender = $this->createMock(EmailSender::class);
+      $this->encerrador = new Encerrador($leilaoDao, $this->emailSender);
   }
 
   public function testLeiloesComMaisDeUmaSemanaDevemSerEncerrados()
@@ -61,8 +65,14 @@ class EncerradorTest extends TestCase
     self::assertEquals('Variant 1972 0km', $leiloes[1]->recuperarDescricao());
   }
 
-  /*public function testDeveContinuarOProcessamentoAoEncontrarErroAoEnviarEmail()
+  public function testDeveContinuarOProcessamentoAoEncontrarErroAoEnviarEmail()
   {
+    $e = new \DomainException('Error to send email');
     
-  }*/
+    $this->emailSender->expects($this->exactly(2))
+      ->method('notifyEndOfAuction')
+      ->willThrowException($e);
+
+    $this->encerrador->encerra();
+  }
 }

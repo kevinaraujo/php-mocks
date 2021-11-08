@@ -21,9 +21,16 @@ class Encerrador
        
         foreach ($leiloes as $leilao) {
             if ($leilao->temMaisDeUmaSemana()) {
-                $leilao->finaliza();
-                $this->dao->atualiza($leilao);
-                $this->emailSender->notifyEndOfAuction($leilao);
+                
+                try {
+
+                    $leilao->finaliza();
+                    $this->dao->atualiza($leilao);
+                    $this->emailSender->notifyEndOfAuction($leilao);
+
+                } catch (\DomainException $ex) {
+                    error_log($ex->getMessage());
+                }
             }
         }
     }
