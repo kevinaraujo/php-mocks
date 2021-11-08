@@ -49,4 +49,9 @@ class EncerradorTest extends TestCase
     self::assertEquals('Fiat 147 0km', $leiloes[0]->recuperarDescricao());
     self::assertEquals('Variant 1972 0km', $leiloes[1]->recuperarDescricao());
   }
+
+  public function testProcessoDeEncerramentoDeveContinuarMesmoOcorrendoErro()
+  {
+    
+  }
 }
