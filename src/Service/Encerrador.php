@@ -21,7 +21,7 @@ class Encerrador
        
         foreach ($leiloes as $leilao) {
             if ($leilao->temMaisDeUmaSemana()) {
-                
+                    
                 try {
 
                     $leilao->finaliza();
